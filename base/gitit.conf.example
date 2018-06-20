@@ -1,0 +1,61 @@
+address: 0.0.0.0
+port: 5001
+wiki-title: Wiki
+repository-type: Git
+repository-path: wikidata
+require-authentication: modify
+authentication-method: form
+user-file: gitit-users
+session-timeout: 60
+static-dir: static
+default-extension: page
+default-page-type: Markdown
+math: mathjax
+mathjax-script: https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+show-lhs-bird-tracks: no
+templates-dir: templates
+log-file: gitit.log
+log-level: WARNING
+front-page: Front Page
+no-delete: Front Page, Help
+no-edit: Help
+default-summary:
+delete-summary: Deleted using web interface.
+table-of-contents: yes
+plugins:
+use-cache: no
+cache-dir: cache
+max-upload-size: 100K
+max-page-size: 100K
+debug-mode: no
+compress-responses: yes
+mime-types-file: /etc/mime.types
+use-recaptcha: no
+recaptcha-private-key:
+recaptcha-public-key:
+access-question:
+access-question-answers:
+rpx-domain:
+rpx-key:
+mail-command: sendmail %s
+reset-password-message:
+  > From: nobody@$hostname$
+  > To: $useremail$
+  > Subject: Wiki password reset
+  >
+  > Dear $username$:
+  > 
+  > To reset your password, please follow the link below:
+  > http://$hostname$:$port$$resetlink$
+  > 
+  > Yours sincerely,
+  > The Wiki Master
+use-feed: no
+base-url:
+absolute-urls: no
+feed-days: 14
+feed-refresh-time: 60
+pdf-export: no
+pandoc-user-data:
+xss-sanitize: yes
+recent-activity-days: 30
