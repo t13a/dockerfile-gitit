@@ -20,6 +20,9 @@ RUN apt-get update && \
     stack install && \
     rm -rf /var/lib/apt/lists/*
 
-ENV PATH /opt/stack/snapshots/x86_64-linux/lts-8.0/8.0.2/bin:$PATH
+ARG HASKELL_VERSION_LONG=${HASKELL_VERSION_LONG:-8.0.2}
+ARG HASKELL_VERSION_SHORT=${LTS_VERSION_SHORT:-8.0}
+
+ENV PATH ${STACK_ROOT}/snapshots/x86_64-linux/lts-${HASKELL_VERSION_SHORT}/${HASKELL_VERSION_LONG}/bin:$PATH
 
 ENTRYPOINT [ "/entrypoint.sh" ]
