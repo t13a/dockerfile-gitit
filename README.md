@@ -11,7 +11,6 @@ Following packages are included:
    -  Graphviz
    -  PlantUML
    -  TeX Live
-   -  Noto Fonts
 
 ## Usage
 
@@ -19,7 +18,7 @@ Following packages are included:
 
     docker run --rm \
     -p 5001:5001 \
-    t13a/gitit
+    t13a/gitit:base
 
 ### Use custom configuration
 
@@ -27,9 +26,9 @@ Following packages are included:
     ...
     -e TIMEZONE="Asia/Tokyo" \
     -v $(pwd)/gitit:/gitit \
-    -v $(pwd)/gitit.conf:/gitit.conf \
+    -v $(pwd)/pandoc:/pandoc \
     ...
-    t13a/gitit
+    t13a/gitit:base
 
 ### Run in specific UID/GID
 
@@ -38,12 +37,4 @@ Following packages are included:
     -e PUID=1001 \
     -e PGID=1002 \
     ...
-    t13a/gitit
-
-### Run as command
-
-    cat input.md |
-    docker run -i --rm \
-    t13a/gitit \
-    pandoc -f markdown -t html > output.html
-
+    t13a/gitit:base

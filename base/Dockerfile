@@ -1,28 +1,37 @@
-ARG HASKELL_VERSION=${HASKELL_VERSION:-8.0.2}
+ARG DEBIAN_VERSION=${DEBIAN_VERSION:-stretch}
 
-FROM haskell:${HASKELL_VERSION}
+FROM debian:${DEBIAN_VERSION}
 
+ARG LTS_VERSION=${LTS_VERSION:-8.0}
+ARG GHC_VERSION=${GHC_VERSION:-8.0.2}
 ARG GITIT_BRANCH=${GITIT_BRANCH:-0.12.2.1}
 ARG GITIT_REPOSITORY=${GITIT_REPOSITORY:-https://github.com/jgm/gitit}
 
+ENV LTS_VERSION=${LTS_VERSION}
+ENV GHC_VERSION=${GHC_VERSION}
+ENV LANG C.UTF-8
 ENV STACK_ROOT /opt/stack
 
 ADD rootfs /
 
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
     darcs \
     git \
     mercurial \
-    mime-support && \
+    mime-support \
+    netbase && \
+    curl -sSL https://get.haskellstack.org/ | sh && \
     git clone -b ${GITIT_BRANCH} --depth 1 ${GITIT_REPOSITORY} /opt/gitit && \
     cd /opt/gitit && \
     stack install && \
-    rm -rf /var/lib/apt/lists/*
-
-ARG HASKELL_VERSION_LONG=${HASKELL_VERSION_LONG:-8.0.2}
-ARG HASKELL_VERSION_SHORT=${LTS_VERSION_SHORT:-8.0}
-
-ENV PATH ${STACK_ROOT}/snapshots/x86_64-linux/lts-${HASKELL_VERSION_SHORT}/${HASKELL_VERSION_LONG}/bin:$PATH
+    echo "resolver: lts-${LTS_VERSION}" >> ${STACK_ROOT}/global-project/stack.yaml && \
+    rm -rf \
+    ${STACK_ROOT}/indices \
+    ${STACK_ROOT}/programs/x86_64-linux/ghc-${GHC_VERSION}.tar.xz \
+    /tmp/* \
+    /var/lib/apt/lists/*
 
 ENTRYPOINT [ "/entrypoint.sh" ]

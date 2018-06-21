@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cp -r ${STACK_ROOT}/snapshots/x86_64-linux/lts-${LTS_VERSION}/${GHC_VERSION}/share/x86_64-linux-ghc-${GHC_VERSION}/pandoc-*/data/* "${1}"
