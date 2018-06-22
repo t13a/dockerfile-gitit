@@ -7,7 +7,6 @@ PGID="${PGID:-1000}"
 GITIT_DATA="${GITIT_DATA:-/gitit}"
 GITIT_CONF="${GITIT_CONF:-${GITIT_DATA}/gitit.conf}"
 GITIT_PLUGINS="${GITIT_PLUGINS:-${GITIT_DATA}/plugins}"
-PANDOC_DATA="${PANDOC_DATA:-/pandoc}"
 
 if [ -n "${TIMEZONE:-}" ]
 then
@@ -25,7 +24,7 @@ fi
 
 if [ ! -e "${GITIT_CONF}" ]
 then
-    env PANDOC_DATA="${PANDOC_DATA}" populate-gitit-conf "${GITIT_CONF}"
+    populate-gitit-conf "${GITIT_CONF}"
     chown gitit:gitit "${GITIT_CONF}"
 fi
 
@@ -38,17 +37,6 @@ fi
 if [ -z "$(ls -A "${GITIT_PLUGINS}")" ]
 then
     exec su gitit -c "populate-gitit-plugins ${GITIT_PLUGINS}"
-fi
-
-if [ ! -e "${PANDOC_DATA}" ]
-then
-    mkdir -p "${PANDOC_DATA}"
-    chown gitit:gitit "${PANDOC_DATA}"
-fi
-
-if [ -z "$(ls -A "${PANDOC_DATA}")" ]
-then
-    exec su gitit -c "populate-pandoc-data ${PANDOC_DATA}"
 fi
 
 cd "${GITIT_DATA}"

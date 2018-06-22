@@ -28,6 +28,7 @@ RUN apt-get update && \
     cd /opt/gitit && \
     stack install && \
     echo "resolver: lts-${LTS_VERSION}" >> ${STACK_ROOT}/global-project/stack.yaml && \
+    ln -s ${STACK_ROOT}/snapshots/x86_64-linux/lts-${LTS_VERSION}/${GHC_VERSION}/share/x86_64-linux-ghc-${GHC_VERSION}/pandoc-*/data /pandoc && \
     rm -rf \
     ${STACK_ROOT}/indices \
     ${STACK_ROOT}/programs/x86_64-linux/ghc-${GHC_VERSION}.tar.xz \
