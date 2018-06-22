@@ -31,12 +31,8 @@ fi
 if [ ! -e "${GITIT_PLUGINS}" ]
 then
     mkdir -p "${GITIT_PLUGINS}"
-    chown gitit:gitit "${GITIT_PLUGINS}"
-fi
-
-if [ -z "$(ls -A "${GITIT_PLUGINS}")" ]
-then
-    exec su gitit -c "populate-gitit-plugins ${GITIT_PLUGINS}"
+    populate-gitit-plugins "${GITIT_PLUGINS}"
+    chown -R gitit:gitit "${GITIT_PLUGINS}"
 fi
 
 cd "${GITIT_DATA}"
