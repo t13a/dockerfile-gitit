@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cp /opt/gitit/plugins/*.hs "${1}"
+cp /opt/gitit-plugins/*.hs "${1}"
