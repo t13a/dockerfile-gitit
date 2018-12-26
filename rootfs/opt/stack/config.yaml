@@ -1,3 +1,0 @@
-local-bin-path: /usr/local/bin
-system-ghc: true
-install-ghc: true

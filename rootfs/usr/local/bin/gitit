@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function stack_path() {
+    (
+        cd /opt/gitit
+        stack --allow-different-user path "${@}"
+    )
+}
+
+export GHC_PACKAGE_PATH="$(stack_path --ghc-package-path)"
+
+exec "$(stack_path --local-install-root)/bin/gitit" "${@}"

@@ -2,44 +2,44 @@
 
 set -euo pipefail
 
-PUID="${PUID:-1000}"
-PGID="${PGID:-1000}"
-GITIT_DATA="${GITIT_DATA:-/gitit}"
-GITIT_CONF="${GITIT_CONF:-${GITIT_DATA}/gitit.conf}"
-GITIT_PLUGINS="${GITIT_PLUGINS:-${GITIT_DATA}/plugins}"
+GITIT_PLUGINS_DIR="${GITIT_WORK_DIR}/plugins"
 
 if [ -n "${TIMEZONE:-}" ]
 then
-    ln -sf "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime
+    ln -fsv "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime
 fi
 
-groupadd -g "${PGID}" -o gitit
-useradd -g "${PGID}" -m -o -u "${PUID}" gitit
-
-if [ ! -e "${GITIT_DATA}" ]
-then
-    mkdir "${GITIT_DATA}"
-    chown gitit:gitit "${GITIT_DATA}"
-fi
+groupadd -g "${GITIT_GID}" -o "${GITIT_USER}"
+useradd -g "${GITIT_USER}" -m -o -u "${GITIT_UID}" "${GITIT_USER}"
 
 if [ ! -e "${GITIT_CONF}" ]
 then
-    populate-gitit-conf "${GITIT_CONF}"
-    chown gitit:gitit "${GITIT_CONF}"
+    gitit-print-default-config > "${GITIT_CONF}"
+    chown "${GITIT_USER}:${GITIT_USER}" "${GITIT_CONF}"
 fi
 
-if [ ! -e "${GITIT_PLUGINS}" ]
+if [ ! -e "${GITIT_WORK_DIR}" ]
 then
-    mkdir -p "${GITIT_PLUGINS}"
-    populate-gitit-plugins "${GITIT_PLUGINS}"
-    chown -R gitit:gitit "${GITIT_PLUGINS}"
+    mkdir -p "${GITIT_WORK_DIR}"
+    chown "${GITIT_USER}:${GITIT_USER}" "${GITIT_WORK_DIR}"
 fi
 
-cd "${GITIT_DATA}"
+if [ ! -e "${GITIT_PLUGINS_DIR}" ]
+then
+    mkdir -p "${GITIT_PLUGINS_DIR}"
+    chown "${GITIT_USER}:${GITIT_USER}" "${GITIT_PLUGINS_DIR}"
+fi
+
+if [ -z "$(ls -A "${GITIT_PLUGINS_DIR}")" ]
+then
+    gitit-list-plugins | xargs cp -r -t "${GITIT_PLUGINS_DIR}"
+fi
+
+cd "${GITIT_WORK_DIR}"
 
 if [ ${#@} -eq 0 ]
 then
-    exec su gitit -c "exec gitit-with-env -f ${GITIT_CONF}"
+    exec gosu "${GITIT_USER}" gitit -f "${GITIT_CONF}"
 else
     exec "${@}"
 fi

@@ -1,34 +1,50 @@
-Gitit
-=====
+# Gitit
 
 Dockerfile for [Gitit](https://github.com/jgm/gitit).
 
-## Usage
+## Getting started
 
-### Getting started
+```sh
+$ docker run --rm -p 5001:5001 t13a/gitit
+```
 
-    $ docker run --rm \
-    -p 5001:5001 \
-    t13a/gitit
+## Configuration
 
-### Set custom configuration
+### Mount prepared volumes
 
-    $ docker run --rm \
-    ...
-    -e TIMEZONE="Asia/Tokyo" \
-    -v $(pwd)/gitit:/gitit \
-    -v $(pwd)/pandoc:/pandoc \
-    ...
-    t13a/gitit
+```sh
+$ docker run \
+...
+-v $(pwd)/gitit.conf:/gitit.conf \
+-v $(pwd)/gitit:/gitit \
+...
+t13a/gitit
+```
 
-### Run in specific UID/GID
+To generate default configuration, execute `docker run --rm t13a/gitit gitit --print-default-config > gitit.conf`. The user data directory will be populated automatically.
 
-    $ docker run --rm \
-    ...
-    -e PUID=1001 \
-    -e PGID=1002 \
-    ...
-    t13a/gitit
+### Set timezone
+
+```sh
+$ docker run \
+...
+-e TIMEZONE=Asia/Tokyo \
+...
+t13a/gitit
+```
+
+### Set process UID/GID
+
+```sh
+$ docker run \
+...
+-e GITIT_UID=1234 \
+-e GITIT_GID=5678 \
+...
+t13a/gitit
+```
+
+## Advanced usage
 
 ### Generate GraphViz/PlantUML diagram (**Experimental**)
 
@@ -38,7 +54,7 @@ For details, please see [my Gitit plugins](http://github.com/t13a/gitit-plugins)
     ...
     t13a/gitit:experimental # instead of t13a/gitit
 
-By default, diagram generation is delegated to [public PlantUML server](http://www.plantuml.com/plantuml/).  To use custom server, set URL to `PLANTUML_SERVER_URL` environment variable.
+By default, diagram generation is delegated to [public PlantUML server](http://www.plantuml.com/plantuml/). To use custom server, set URL to `PLANTUML_SERVER_URL` environment variable.
 
     $ docker run --rm \
     ...

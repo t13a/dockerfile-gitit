@@ -1,8 +1,0 @@
-#!/bin/bash
-
-set -euo pipefail
-
-gitit --print-default-config |
-sed -r \
--e "s|^(plugins:.*)|\\1 plugins/GraphViz, plugins/PlantUml|g" \
--e "s|^(pandoc-user-data:.*)|\\1 /pandoc|g" > "${1}"
