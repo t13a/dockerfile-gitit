@@ -7,7 +7,7 @@ RUN apt-get update && \
     curl -sSL https://get.haskellstack.org/ | sh && \
     rm -rf /var/lib/apt/lists/*
 
-ARG GITIT_BRANCH=0.12.2.1
+ARG GITIT_BRANCH=0.12.3
 ARG GITIT_REPOSITORY=https://github.com/jgm/gitit
 
 ENV LANG=C.UTF-8 \
