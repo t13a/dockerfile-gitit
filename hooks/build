@@ -3,7 +3,7 @@
 set -euo pipefail
 
 docker build \
---build-arg=GITIT_BRANCH="${DOCKER_TAG:-${CACHE_TAG}}" \
+--build-arg=GITIT_BRANCH="${CACHE_TAG}" \
 -f "${DOCKERFILE_PATH}" \
 -t "${IMAGE_NAME}" \
 .
