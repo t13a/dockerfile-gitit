@@ -9,8 +9,8 @@ then
     ln -fsv "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime
 fi
 
-id -g ${GITIT_GID}" &>/dev/null || groupadd -g "${GITIT_GID}" -o "${GITIT_USER}"
-id -u ${GITIT_USER}" &>/dev/null || useradd -g "${GITIT_USER}" -m -o -u "${GITIT_UID}" "${GITIT_USER}"
+id -g "${GITIT_GID}" &>/dev/null || groupadd -g "${GITIT_GID}" -o "${GITIT_USER}"
+id -u "${GITIT_USER}" &>/dev/null || useradd -g "${GITIT_USER}" -m -o -u "${GITIT_UID}" "${GITIT_USER}"
 
 if [ ! -e "${GITIT_CONF}" ]
 then
