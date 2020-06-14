@@ -28,27 +28,22 @@ function short_version() {
 
 source "$(dirname "${BASH_SOURCE[0]}")/env"
 
-CACHE_TAG="${CACHE_TAG:-${DOCKER_TAG}}"
+VERSION="${GITIT_BRANCH}"
 
-if [ "${CACHE_TAG}" == latest ]
-then
-    VERSION="${GITIT_VERSION_LATEST}"
+while true
+do
+    echo "push '${IMAGE_NAME}' as '${DOCKER_REPO}:${VERSION}'" >&2
+    run_or_dry_run docker tag "${IMAGE_NAME}" "${DOCKER_REPO}:${VERSION}"
+    run_or_dry_run docker push "${DOCKER_REPO}:${VERSION}"
 
-    while true
-    do
-        echo "push '${IMAGE_NAME}' as '${DOCKER_REPO}:${VERSION}'" >&2
-        run_or_dry_run docker tag "${IMAGE_NAME}" "${DOCKER_REPO}:${VERSION}"
-        run_or_dry_run docker push "${DOCKER_REPO}:${VERSION}"
-
-        if SHORT_VERSION="$(short_version "${VERSION}")"
+    if SHORT_VERSION="$(short_version "${VERSION}")"
+    then
+        if [ "${VERSION}" != "${SHORT_VERSION}" ]
         then
-            if [ "${VERSION}" != "${SHORT_VERSION}" ]
-            then
-                VERSION="${SHORT_VERSION}"
-                continue
-            fi
+            VERSION="${SHORT_VERSION}"
+            continue
         fi
+    fi
 
-        break
-    done
-fi
+    break
+done
