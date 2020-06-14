@@ -13,19 +13,11 @@ function run_or_dry_run() {
 
 source "$(dirname "${BASH_SOURCE[0]}")/env"
 
-CACHE_TAG="${CACHE_TAG:-${DOCKER_TAG}}"
-
-if [ "${CACHE_TAG}" == latest ]
-then
-    GITIT_VERSION="${GITIT_VERSION_LATEST}"
-else
-    GITIT_VERSION="${CACHE_TAG}"
-fi
-
-echo "build Gitit ${GITIT_VERSION} as '${DOCKER_REPO}:${CACHE_TAG}'" >&2
+echo "build Gitit ${GITIT_BRANCH} (from '${HASKELL_IMAGE}') as '${IMAGE_NAME}'" >&2
 
 run_or_dry_run docker build \
---build-arg=GITIT_BRANCH="${GITIT_VERSION}" \
+--build-arg=GITIT_BRANCH="${GITIT_BRANCH}" \
+--build-arg=HASKELL_IMAGE="${HASKELL_IMAGE}" \
 -f "${DOCKERFILE_PATH}" \
 -t "${IMAGE_NAME}" \
 .
