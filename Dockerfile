@@ -1,4 +1,4 @@
-ARG HASKELL_IMAGE=haskell:8.4.3
+ARG HASKELL_IMAGE=haskell:8.8.3
 
 FROM ${HASKELL_IMAGE}
 
@@ -11,7 +11,7 @@ RUN apt-get update \
         mime-support \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GITIT_BRANCH=0.12.3.1
+ARG GITIT_BRANCH=0.13.0.0
 ARG GITIT_REPOSITORY=https://github.com/jgm/gitit
 
 ENV LANG=C.UTF-8 \
@@ -23,7 +23,10 @@ RUN stack config set system-ghc --global true \
     && cd /opt/gitit \
     && stack --allow-different-user build --flag pandoc:embed_data_files \
     && stack clean \
-    && rm -rf ${STACK_ROOT}/indices
+    && rm -rf \
+        ${STACK_ROOT}/pantry \
+        ${STACK_ROOT}/setup-exec-cache \
+        ${STACK_ROOT}/setup-exec-src
 
 COPY rootfs /
 
